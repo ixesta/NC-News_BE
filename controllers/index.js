@@ -52,8 +52,6 @@ exports.getArticlesByTopic = (req, res, next) => {
 
 }
 
-
-
 exports.addArticleToTopic = (req, res, next) => {
   const newArticle = new Article({
     title: req.body.title,
@@ -68,4 +66,33 @@ exports.addArticleToTopic = (req, res, next) => {
     })
     .catch(console.log)
 
+}
+
+exports.getArticlesById = (req, res, next) => {
+  Article.findById(req.params.article_id)
+    .then(article_id => {
+      res.send(article_id)
+    })
+}
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  Comment.find({ belongs_to: req.params.article_id })
+    .then(comments => {
+      res.send(comments)
+    })
+    .catch(console.log)
+}
+
+exports.addCommentToArticle = (req, res, next) => {
+  const newComment = new Comment({
+    body: req.body.comment,
+    belongs_to: req.params.article_id,
+    created_by: '5b058261f82dc80c7c5fb422'
+  })
+  return Comment.create(newComment)
+
+    .then(comment => {
+      res.send(comment);
+    })
+    .catch(console.log)
 }
