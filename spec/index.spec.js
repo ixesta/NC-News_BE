@@ -13,12 +13,11 @@ describe('NC_news', () => {
       .then(() => {
         return seedDB(testData)
           .then((docs) => {
-            console.log(docs)
             // [comments] = docs
             comments = docs[0]
-            topics = docs[1]
-            articles = docs[2]
-            users = docs[3]
+            topics = docs[3]
+            articles = docs[1]
+            users = docs[2]
           })
       })
   })
@@ -31,12 +30,10 @@ describe('NC_news', () => {
         .get('/api/articles')
         .expect(200)
         .then(response => {
-          console.log(response.body)
           expect(response.body).to.be.an('object');
           expect(response.body.articles.length).to.equal(4);
         })
     })
-
   })
 
   describe('/comments', () => {
@@ -44,13 +41,83 @@ describe('NC_news', () => {
       return request
         .get('/api/comments')
         .expect(200)
-        .then(response => {
-          console.log(response.body, '&&&&&&&&')
-          expect(response.body).to.be.an('array');
-          expect(response.body.length).to.equal(8);
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(8);
         })
     })
+  })
 
+  describe('/topics', () => {
+    it('returns 200 and all topics', () => {
+      return request
+        .get('/api/topics')
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+        })
+    })
+  })
+  describe('/users', () => {
+    it('returns 200 and all users', () => {
+      return request
+        .get('/api/users')
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('array');
+          expect(res.body.length).to.equal(2);
+        })
+    })
+  })
+  describe('/articles/:article_id', () => {
+    it('returns 200 and the article', () => {
+      return request
+        .get(`/api/articles/${articles[1]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.article._id).to.equal(`${articles[1]._id}`);
+        })
+    })
+  })
+  describe('/topics/:topic_id', () => {
+    it('returns 200 and the topics by id', () => {
+      return request
+        .get(`/api/topics/${topics[1]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.topic._id).to.equal(`${topics[1]._id}`);
+        })
+    })
+  })
+
+  describe('/articles/:article_id', () => {
+    it('returns 200 and the articles by id', () => {
+      return request
+        .get(`/api/articles/${articles[1]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.article._id).to.equal(`${articles[1]._id}`);
+        })
+    })
+  })
+
+  describe('/topics/:topic_id/articles', () => {
+    it('returns 200 and the articles that belong to that topic', () => {
+      return request
+        .post('/api/topics/cooking/articles')
+        .send(
+          { title: 'test', body: "test article" }
+        )
+        .expect(201)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.article.title).to.equal('test')
+        })
+    })
   })
 
   after(() => {

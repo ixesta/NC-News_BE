@@ -17,13 +17,13 @@ exports.seedDB = ({ topicsData, usersData, commentsData, articlesData }) => {
     .then(([topicDocs, userDocs]) => {
       return Promise.all([
         Article.insertMany(formatArticleData(articlesData, userDocs)),
-        userDocs
+        userDocs, topicDocs
       ]);
     })
-    .then(([articleDocs, userDocs]) => {
+    .then(([articleDocs, userDocs, topicDocs]) => {
       return Promise.all([Comment.insertMany(
         formatCommentData(commentsData, articleDocs, userDocs)
-      ), articleDocs, userDocs]);
+      ), articleDocs, userDocs, topicDocs]);
     })
     .then(([commentsDocs, articleDocs, userDocs, topicDocs]) => {
       return [commentsDocs, articleDocs, userDocs, topicDocs]

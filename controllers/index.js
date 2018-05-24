@@ -54,8 +54,8 @@ exports.getArticles = (req, res, next) => {
 
 exports.getTopicsById = (req, res, next) => {
   Topic.findById(req.params.topic_id)
-    .then(topic_id => {
-      res.send(topic_id)
+    .then(topic => {
+      res.send({ topic })
     })
 }
 
@@ -64,7 +64,6 @@ exports.getArticlesByTopic = (req, res, next) => {
     .then(articles => {
       res.send(articles)
     })
-
 }
 
 exports.addArticleToTopic = (req, res, next) => {
@@ -77,7 +76,7 @@ exports.addArticleToTopic = (req, res, next) => {
   return Article.create(newArticle)
 
     .then(article => {
-      res.send(article);
+      res.status(201).send({ article });
     })
     .catch(console.log)
 
@@ -85,8 +84,8 @@ exports.addArticleToTopic = (req, res, next) => {
 
 exports.getArticlesById = (req, res, next) => {
   Article.findById(req.params.article_id)
-    .then(article_id => {
-      res.send(article_id)
+    .then(article => {
+      res.send({ article })
     })
 }
 
