@@ -135,7 +135,7 @@ describe('NC_news', () => {
   })
 
   describe('articles/:article_id/comments', () => {
-    it('POST returns 201 and the comment posted to an specific article', () => {
+    it('POST returns 201 and the comment posted to a specific article', () => {
       console.log(articles[1]._id)
       return request
         .post(`/api/articles/${articles[1]._id}/comments`)
@@ -151,6 +151,18 @@ describe('NC_news', () => {
           console.log(res.body)
           expect(res.body).to.be.an('object');
           expect(res.body.body).to.equal('test comment')
+        })
+    })
+  })
+
+  describe('/users/:username', () => {
+    it('returns 200 and the users by username', () => {
+      return request
+        .get(`/api/users/${users[1].username}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.username).to.equal(`${users[1].username}`);
         })
     })
   })
