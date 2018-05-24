@@ -100,6 +100,7 @@ Add a new comment to an article. This route requires a JSON body with a comment 
 e.g: `{"comment": "This is my new comment"}` -->
 
 <!-- ```http
+
 PUT /api/articles/:article_id
 ```
 

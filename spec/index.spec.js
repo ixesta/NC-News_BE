@@ -93,20 +93,21 @@ describe('NC_news', () => {
     })
   })
 
-  describe('/articles/:article_id', () => {
-    it('returns 200 and the articles by id', () => {
+  describe('/topics/:topic/articles', () => {
+    it("GET /:topic/articles should return all articles corresponding to that topic", () => {
       return request
-        .get(`/api/articles/${articles[1]._id}`)
+        .get("/api/topics/cats/articles")
         .expect(200)
         .then(res => {
-          expect(res.body).to.be.an('object');
-          expect(res.body.article._id).to.equal(`${articles[1]._id}`);
+          expect(res.body.length).to.equal(2);
+          expect(res.body[1].body).to.equal(
+            "Bastet walks amongst us, and the cats are taking arms!");
         })
     })
   })
 
   describe('/topics/:topic_id/articles', () => {
-    it('returns 200 and the articles that belong to that topic', () => {
+    it('POST returns 201 and the article posted to that topic', () => {
       return request
         .post('/api/topics/cooking/articles')
         .send(
@@ -116,6 +117,40 @@ describe('NC_news', () => {
         .then(res => {
           expect(res.body).to.be.an('object');
           expect(res.body.article.title).to.equal('test')
+        })
+    })
+  })
+
+  describe('articles/:article_id/comments', () => {
+    it("GET articles/:article_id/comments should return all comments corresponding to that article", () => {
+      return request
+        .get(`/api/articles/${articles[1]._id}/comments`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.comments[1]._id.length).to.equal(24);
+          expect(res.body.comments[1].body).to.equal("This morning, I showered for nine minutes.");
+
+        })
+    })
+  })
+
+  describe('articles/:article_id/comments', () => {
+    it('POST returns 201 and the comment posted to an specific article', () => {
+      console.log(articles[1]._id)
+      return request
+        .post(`/api/articles/${articles[1]._id}/comments`)
+        .send(
+          {
+            body: "test comment",
+            belongs_to: `${articles[1]._id}`,
+
+          }
+        )
+        .expect(201)
+        .then(res => {
+          console.log(res.body)
+          expect(res.body).to.be.an('object');
+          expect(res.body.body).to.equal('test comment')
         })
     })
   })

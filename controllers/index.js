@@ -94,21 +94,22 @@ exports.getArticlesById = (req, res, next) => {
 exports.getCommentsByArticleId = (req, res, next) => {
   Comment.find({ belongs_to: req.params.article_id })
     .then(comments => {
-      res.send(comments)
+      res.send({ comments })
     })
     .catch(console.log)
 }
 
 exports.addCommentToArticle = (req, res, next) => {
+  console.log(req.body, '<<<<<<<<<<<<<< addding comment...')
   const newComment = new Comment({
-    body: req.body.comment,
+    body: req.body.body,
     belongs_to: req.params.article_id,
     created_by: '5b058261f82dc80c7c5fb422'
   })
   return Comment.create(newComment)
 
     .then(comment => {
-      res.send(comment);
+      res.status(201).send(comment);
     })
     .catch(console.log)
 }
