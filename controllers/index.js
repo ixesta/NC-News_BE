@@ -125,3 +125,18 @@ exports.changeVotesofComments = (req, res, next) => {
     }).then(comment => res.status(200).send({ comment }))
     .catch(next);
 }
+
+exports.deleteCommentById = (req, res, next) => {
+  return Comment.findByIdAndRemove(req.params.comment_id)
+    .then(commentId => {
+      res.status(200).send('deleted succesfully')
+    })
+}
+
+exports.getUsersByUsername = (req, res, next) => {
+  User.findOne({ username: req.params.username })
+    .then(user => {
+      res.send(user)
+    })
+    .catch(console.log)
+}
