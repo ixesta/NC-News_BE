@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose'); // we are using mongoose methods
 const Article = require('../models/Article');
 const Comment = require('../models/Comment');
 const Topic = require('../models/Topic');
@@ -95,4 +95,33 @@ exports.addCommentToArticle = (req, res, next) => {
       res.send(comment);
     })
     .catch(console.log)
+}
+
+exports.changeVotes = (req, res, next) => {
+  const articleId = req.params.article_id;
+  return Article.findByIdAndUpdate(articleId)
+    .then(article => {
+      if (req.query.vote === 'up') article.votes++;
+      else if (req.query.vote === 'down') article.votes--;
+      return article.save();
+    }).then(article => res.status(200).send({ article }))
+    .catch(next);
+}
+
+exports.getCommentsById = (req, res, next) => {
+  Comment.findById(req.params.comment_id)
+    .then(comment_id => {
+      res.send(comment_id)
+    })
+}
+
+exports.changeVotesofComments = (req, res, next) => {
+  const commentId = req.params.comment_id;
+  return Comment.findByIdAndUpdate(commentId)
+    .then(comment => {
+      if (req.query.vote === 'up') comment.votes++;
+      else if (req.query.vote === 'down') comment.votes--;
+      return comment.save();
+    }).then(comment => res.status(200).send({ comment }))
+    .catch(next);
 }
