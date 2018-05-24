@@ -25,7 +25,7 @@ exports.seedDB = ({ topicsData, usersData, commentsData, articlesData }) => {
         formatCommentData(commentsData, articleDocs, userDocs)
       ), articleDocs, userDocs]);
     })
-    .then(commentsDocs => {
+    .then(([commentsDocs, articleDocs, userDocs, topicDocs]) => {
       return [commentsDocs, articleDocs, userDocs, topicDocs]
     })
     .catch(console.log);

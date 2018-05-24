@@ -31,11 +31,26 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-  Article.find()
+  Article.find().lean()
     .then(articles => {
-      res.send(articles)
+      return Promise.all([articles, ...articles.map(artObj => Comment.count({ belongs_to: artObj._id }))])
+    })
+    .then(([articles, ...commentCounts]) => {
+      let result = articles.map((artObj, index) => {
+        artObj.comments = commentCounts[index]
+        return artObj;
+      })
+      res.send({ articles: result })
     })
 }
+// exports.getArticles = (req, res, next) => {
+//   Article.find()
+//     .then(Comment.findOne({ belongs_to: req.params.article_id }))
+//     .then(articles => {
+//       res.send(articles)
+//     })
+//     .catch(console.log)
+// }
 
 exports.getTopicsById = (req, res, next) => {
   Topic.findById(req.params.topic_id)
@@ -75,6 +90,8 @@ exports.getArticlesById = (req, res, next) => {
     })
 }
 
+
+
 exports.getCommentsByArticleId = (req, res, next) => {
   Comment.find({ belongs_to: req.params.article_id })
     .then(comments => {
@@ -104,7 +121,7 @@ exports.changeVotes = (req, res, next) => {
       if (req.query.vote === 'up') article.votes++;
       else if (req.query.vote === 'down') article.votes--;
       return article.save();
-    }).then(article => res.status(200).send({ article }))
+    }).then(article => res.status(200).send({ msg: 'Thanks for your vote!!' }))
     .catch(next);
 }
 
