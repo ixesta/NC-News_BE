@@ -167,6 +167,17 @@ describe('NC_news', () => {
     })
   })
 
+  describe('/:article_id', () => {
+    it('returns 200 and increments the vote', () => {
+      return request
+        .put(`/api/articles/${articles[0]._id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
+        })
+    })
+  })
+
   after(() => {
     return mongoose.disconnect(); // disconnect after all tests
   })
