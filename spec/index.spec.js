@@ -1,3 +1,4 @@
+process.env.NODE_ENV = 'test'
 const app = require('../app')
 const { expect } = require('chai')
 const mongoose = require('mongoose')
@@ -291,7 +292,7 @@ describe('NC_news', () => {
         .get('/api/users/wrongUsername')
         .expect(400)
         .then(res => {
-          expect(res.body).to.eql({ msg: 'Wrong username' });
+          expect(res.body).to.eql({ msg: 'malformed request' });
         })
     })
   })
