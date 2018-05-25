@@ -75,13 +75,18 @@ exports.getArticles = (req, res, next) => {
 
 
 exports.getArticlesByTopic = (req, res, next) => {
+  console.log('***********')
   Article.find({ belongs_to: req.params.topic })
     .then(articles => {
+      // hitting an empty array , status 404
+      if (articles.length === 0) next({
+        status: 404,
+        msg: 'Page not found'
+      })
       res.send(articles)
     })
     .catch(err => {
       next({
-
         status: 404,
         msg: 'Page not found'
       })
@@ -164,7 +169,8 @@ exports.changeVotes = (req, res, next) => {
       if (req.query.vote === 'up') article.votes++;
       else if (req.query.vote === 'down') article.votes--;
       return article.save();
-    }).then(article => res.status(200).send({ msg: 'Thanks for your vote!!' }))
+    })
+    .then(article => res.status(200).send({ msg: 'Thanks for your vote!!' }))
     .catch(err => {
       next({
         status: 400,

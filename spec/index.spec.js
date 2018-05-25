@@ -224,6 +224,7 @@ describe('NC_news', () => {
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
+          expect(res.body.vote)
         })
     })
     it('PUT returns 400 and error message', () => {
