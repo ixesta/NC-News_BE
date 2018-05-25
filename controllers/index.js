@@ -120,7 +120,7 @@ exports.getArticlesById = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'ID not found'
+        msg: 'malformed request'
       })
     })
 }
@@ -135,7 +135,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'Wrong ID'
+        msg: 'malformed request'
       })
     })
 }
@@ -154,7 +154,7 @@ exports.addCommentToArticle = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'Wrong ID. Your comment has not been added.'
+        msg: 'Malformed request. Your comment has not been added.'
       })
     })
 }
@@ -185,7 +185,7 @@ exports.getCommentsById = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'Wrong ID. Try again'
+        msg: 'malformed request'
       })
     })
 }
@@ -204,7 +204,7 @@ exports.changeVotesofComments = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'Wrong input. Try again with UP or DOWN'
+        msg: 'Malformed request. Try again with UP or DOWN'
       })
     })
 }

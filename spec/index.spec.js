@@ -112,34 +112,16 @@ describe('NC_news', () => {
           expect(res.body.article._id).to.equal(`${articles[1]._id}`);
         })
     })
-    it('GET returns 404 and error message', () => {
+    it('GET returns 400 and error message', () => {
       return request
         .get('/api/articles/whatever')
         .expect(400)
         .then(res => {
-          expect(res.body).to.eql({ msg: 'ID not found' });
+          expect(res.body).to.eql({ msg: 'malformed request' });
+          //malformed request
         })
     })
   })
-  // describe('/topics/:topic_id', () => {
-  //   it('GET returns 200 and the topics by id', () => {
-  //     return request
-  //       .get(`/api/topics/${topics[1]._id}`)
-  //       .expect(200)
-  //       .then(res => {
-  //         expect(res.body).to.be.an('object');
-  //         expect(res.body.topic._id).to.equal(`${topics[1]._id}`);
-  //       })
-  //   })
-  //   it('GET returns 404 and error message', () => {
-  //     return request
-  //       .get('/api/topics/whatever')
-  //       .expect(404)
-  //       .then(res => {
-  //         expect(res.body).to.eql({ msg: 'ID not found' });
-  //       })
-  //   })
-  // })
 
   describe('/topics/:topic/articles', () => {
     it("GET /:topic/articles should return all articles corresponding to that topic", () => {
@@ -201,7 +183,7 @@ describe('NC_news', () => {
         .get('/api/articles/jhfgkjafgs')
         .expect(400)
         .then(res => {
-          expect(res.body).to.eql({ msg: 'ID not found' });
+          expect(res.body).to.eql({ msg: 'malformed request' });
         })
     })
   })
@@ -228,7 +210,7 @@ describe('NC_news', () => {
         .post('/api/articles/hi/comments')
         .expect(400)
         .then(res => {
-          expect(res.body).to.eql({ msg: 'Wrong ID. Your comment has not been added.' });
+          expect(res.body).to.eql({ msg: 'Malformed request. Your comment has not been added.' });
         })
     })
   })

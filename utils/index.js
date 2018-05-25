@@ -23,7 +23,6 @@ exports.formatUserData = (usersData) => {
 }
 
 
-
 exports.formatArticleData = (articlesData, userDocs) => {
   return articlesData.map(article => {
     return {
@@ -34,6 +33,7 @@ exports.formatArticleData = (articlesData, userDocs) => {
     }
   })
 }
+
 
 exports.formatCommentData = (commentData, articleDocs, userDocs) => {
   return commentData.map(comment => {
@@ -47,44 +47,4 @@ exports.formatCommentData = (commentData, articleDocs, userDocs) => {
     }
   })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// exports.createUserRef = (usersData, usersDocs) => {
-//   return usersData.reduce((acc, user, index) => {
-//     acc[user.username] = usersDocs[index].username;
-//     return acc;
-//   }, {})
-// }
-// const replaceUsernames = (created_by, userRef) => {
-//   console.log(created_by, '****************')
-//   return created_by.reduce((acc, username, index) => {
-//     acc[index] = userRef[username];
-//     return acc;
-//   }, [])
-// }
-
-// exports.formatArticlesData = (articlesData, usersData, userRef) => {
-//   console.log('articlesData', articlesData)
-//   return articlesData.map((article) => {
-//     return {
-//       title: article.title,
-//       body: article.body,
-//       topic: article.belongs_to,
-//       votes: 0,
-//       created_by: replaceUsernames(article.created_by, userRef)
-
-//     }
-//   })
-// }
 
