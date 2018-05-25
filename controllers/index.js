@@ -5,9 +5,6 @@ const Topic = require('../models/Topic');
 const User = require('../models/User');
 
 
-
-mongoose.connect('mongodb://localhost:27017/NC_news');
-
 exports.getTopics = (req, res, next) => {
   Topic.find()
     .then(topics => {
@@ -227,7 +224,7 @@ exports.getUsersByUsername = (req, res, next) => {
     .then(user => {
       if (user === null) return next({
         status: 400,
-        msg: 'Wrong username'
+        msg: 'malformed request'
       })
       res.send(user)
     })
