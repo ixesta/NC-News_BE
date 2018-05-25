@@ -76,18 +76,6 @@ exports.getArticles = (req, res, next) => {
 //     .catch(console.log)
 // }
 
-// exports.getTopicsById = (req, res, next) => {
-//   Topic.findById(req.params.topic_id)
-//     .then(topic => {
-//       res.send({ topic })
-//     })
-//     .catch(err => {
-//       next({
-//         status: 404,
-//         msg: 'ID not found'
-//       })
-//     })
-// }
 
 exports.getArticlesByTopic = (req, res, next) => {
   Article.find({ belongs_to: req.params.topic })
@@ -173,7 +161,7 @@ exports.addCommentToArticle = (req, res, next) => {
 
 exports.changeVotes = (req, res, next) => {
   const articleId = req.params.article_id;
-  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: msg }) : null) : null;
+  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: 'Wrong input. Try again with UP or DOWN' }) : null) : null;
   return Article.findByIdAndUpdate(articleId)
     .then(article => {
       if (req.query.vote === 'up') article.votes++;
@@ -204,7 +192,7 @@ exports.getCommentsById = (req, res, next) => {
 
 exports.changeVotesofComments = (req, res, next) => {
   const msg = 'Invalid input, use “up” to add a vote or “down” to decrease it.'
-  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: msg }) : null) : null;
+  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: 'Wrong input. Try again with UP or DOWN' }) : null) : null;
   const commentId = req.params.comment_id;
   req.query.vote
   return Comment.findByIdAndUpdate(commentId)

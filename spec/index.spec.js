@@ -121,25 +121,25 @@ describe('NC_news', () => {
         })
     })
   })
-  describe('/topics/:topic_id', () => {
-    it('GET returns 200 and the topics by id', () => {
-      return request
-        .get(`/api/topics/${topics[1]._id}`)
-        .expect(200)
-        .then(res => {
-          expect(res.body).to.be.an('object');
-          expect(res.body.topic._id).to.equal(`${topics[1]._id}`);
-        })
-    })
-    it('GET returns 404 and error message', () => {
-      return request
-        .get('/api/topics/whatever')
-        .expect(404)
-        .then(res => {
-          expect(res.body).to.eql({ msg: 'ID not found' });
-        })
-    })
-  })
+  // describe('/topics/:topic_id', () => {
+  //   it('GET returns 200 and the topics by id', () => {
+  //     return request
+  //       .get(`/api/topics/${topics[1]._id}`)
+  //       .expect(200)
+  //       .then(res => {
+  //         expect(res.body).to.be.an('object');
+  //         expect(res.body.topic._id).to.equal(`${topics[1]._id}`);
+  //       })
+  //   })
+  //   it('GET returns 404 and error message', () => {
+  //     return request
+  //       .get('/api/topics/whatever')
+  //       .expect(404)
+  //       .then(res => {
+  //         expect(res.body).to.eql({ msg: 'ID not found' });
+  //       })
+  //   })
+  // })
 
   describe('/topics/:topic/articles', () => {
     it("GET /:topic/articles should return all articles corresponding to that topic", () => {
@@ -206,7 +206,7 @@ describe('NC_news', () => {
     })
   })
 
-  describe.only('articles/:article_id/comments', () => {
+  describe('articles/:article_id/comments', () => {
     it('POST returns 201 and the comment posted to a specific article', () => {
       return request
         .post(`/api/articles/${articles[1]._id}/comments`)
@@ -233,17 +233,6 @@ describe('NC_news', () => {
     })
   })
 
-  describe('/users/:username', () => {
-    it('GET returns 200 and the users by username', () => {
-      return request
-        .get(`/api/users/${users[1].username}`)
-        .expect(200)
-        .then(res => {
-          expect(res.body).to.be.an('object');
-          expect(res.body.username).to.equal(`${users[1].username}`);
-        })
-    })
-  })
 
   describe('/:article_id', () => {
     it(' PUT returns 200 and increments the votes for articles', () => {
@@ -254,7 +243,16 @@ describe('NC_news', () => {
           expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
         })
     })
+    it('PUT returns 400 and error message', () => {
+      return request
+        .put(`/api/articles/${articles[0]._id}?vote=hi`)
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Wrong input. Try again with UP or DOWN' });
+        })
+    })
   })
+
   describe('/:comment_id', () => {
     it(' PUT returns 200 and increments the votes for comments', () => {
       return request
@@ -264,10 +262,18 @@ describe('NC_news', () => {
           expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
         })
     })
+    it('PUT returns 400 and error message', () => {
+      return request
+        .put(`/api/comments/${comments[0]._id}?vote=hi`)
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Wrong input. Try again with UP or DOWN' });
+        })
+    })
   })
 
   describe('/:comment_id', () => {
-    it('return 200 for /comments/:comment_id and remove a new comment.', () => {
+    it('returns 200 for /comments/:comment_id and remove a comment by id', () => {
       const commentId = comments[0]._id;
       return request
         .delete(`/api/comments/${commentId}`)
@@ -277,7 +283,34 @@ describe('NC_news', () => {
           expect(response.body).to.be.eql({})
           expect(response.text).to.be.equal(`deleted successfully`)
         })
+    })
+    it('DELETE returns 400 and error message', () => {
+      return request
+        .delete('/api/comments/wrongId')
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'ERROR: Try again' });
+        })
+    })
+  })
 
+  describe('/users/:username', () => {
+    it('GET returns 200 and the users by username', () => {
+      return request
+        .get(`/api/users/${users[1].username}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.be.an('object');
+          expect(res.body.username).to.equal(`${users[1].username}`);
+        })
+    })
+    it('GET returns 400 and error message', () => {
+      return request
+        .get('/api/users/wrongUsername')
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Wrong username' });
+        })
     })
   })
 
