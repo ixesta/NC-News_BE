@@ -13,9 +13,9 @@ router.route('/:topic/articles')
   .get(getArticlesByTopic)
   .post(addArticleToTopic)
 
-router.use('/*', (req, res, next) => {
-  next({ status: 404, msg: 'Page not found' })
-})
+// router.use('/*', (req, res, next) => {
+//   next({ status: 404, msg: 'Page not found' })
+// })
 
 
 module.exports = router;

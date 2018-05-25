@@ -63,7 +63,7 @@ exports.getArticles = (req, res, next) => {
     .catch(err => {
       next({
         status: 404,
-        msg: 'Article not found'
+        msg: 'Page not found'
       })
     })
 }
@@ -117,8 +117,8 @@ exports.addArticleToTopic = (req, res, next) => {
     })
     .catch(err => {
       next({
-        status: 400,
-        msg: 'ERROR: Your article has not been added'
+        status: 404,
+        msg: 'Page not found'
       })
     })
 
@@ -166,7 +166,7 @@ exports.addCommentToArticle = (req, res, next) => {
     .catch(err => {
       next({
         status: 400,
-        msg: 'Your comment has not been added. Try again'
+        msg: 'Wrong ID. Your comment has not been added.'
       })
     })
 }

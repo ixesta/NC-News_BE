@@ -34,9 +34,17 @@ describe('NC_news', () => {
           expect(response.body.articles.length).to.equal(4);
         })
     })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/articljhkdsv')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Page not found' });
+        })
+    })
   })
 
-  describe.only('/comments', () => {
+  describe('/comments', () => {
     it('GET returns 200 and all comments', () => {
       return request
         .get('/api/comments')
@@ -44,6 +52,14 @@ describe('NC_news', () => {
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.equal(8);
+        })
+    })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/articljhkdsv')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Page not found' });
         })
     })
   })
@@ -58,6 +74,14 @@ describe('NC_news', () => {
           expect(res.body.length).to.equal(2);
         })
     })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/articljhkdsv')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Page not found' });
+        })
+    })
   })
   describe('/users', () => {
     it('GET returns 200 and all users', () => {
@@ -67,6 +91,14 @@ describe('NC_news', () => {
         .then(res => {
           expect(res.body).to.be.an('array');
           expect(res.body.length).to.equal(2);
+        })
+    })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/articljhkdsv')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Page not found' });
         })
     })
   })
@@ -80,6 +112,14 @@ describe('NC_news', () => {
           expect(res.body.article._id).to.equal(`${articles[1]._id}`);
         })
     })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/articles/whatever')
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'ID not found' });
+        })
+    })
   })
   describe('/topics/:topic_id', () => {
     it('GET returns 200 and the topics by id', () => {
@@ -89,6 +129,14 @@ describe('NC_news', () => {
         .then(res => {
           expect(res.body).to.be.an('object');
           expect(res.body.topic._id).to.equal(`${topics[1]._id}`);
+        })
+    })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/topics/whatever')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'ID not found' });
         })
     })
   })
@@ -102,6 +150,14 @@ describe('NC_news', () => {
           expect(res.body.length).to.equal(2);
           expect(res.body[1].body).to.equal(
             "Bastet walks amongst us, and the cats are taking arms!");
+        })
+    })
+    it('GET returns 404 and error message', () => {
+      return request
+        .get('/api/topics/coding/banana')
+        .expect(404)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Page not found' });
         })
     })
   })
@@ -119,22 +175,38 @@ describe('NC_news', () => {
           expect(res.body.article.title).to.equal('test')
         })
     })
-  })
-
-  describe('articles/:article_id/comments', () => {
-    it("GET articles/:article_id/comments should return all comments corresponding to that article", () => {
+    it('POST returns 404 and error message', () => {
       return request
-        .get(`/api/articles/${articles[1]._id}/comments`)
-        .expect(200)
+        .get('/api/topics/coding/banana')
+        .expect(404)
         .then(res => {
-          expect(res.body.comments[1]._id.length).to.equal(24);
-          expect(res.body.comments[1].body).to.equal("This morning, I showered for nine minutes.");
-
+          expect(res.body).to.eql({ msg: 'Page not found' });
         })
     })
   })
 
-  describe('articles/:article_id/comments', () => {
+  describe('articles/:article_id', () => {
+    it("GET articles/:article_id/comments should return all comments corresponding to that article", () => {
+      return request
+        .get(`/api/articles/${articles[0]._id}`)
+        .expect(200)
+        .then(res => {
+          expect(res.body.article.title.length).to.equal(35);
+          expect(res.body.article.body).to.equal("I find this existence challenging");
+
+        })
+    })
+    it('GET returns 400 and error message', () => {
+      return request
+        .get('/api/articles/jhfgkjafgs')
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'ID not found' });
+        })
+    })
+  })
+
+  describe.only('articles/:article_id/comments', () => {
     it('POST returns 201 and the comment posted to a specific article', () => {
       return request
         .post(`/api/articles/${articles[1]._id}/comments`)
@@ -149,6 +221,14 @@ describe('NC_news', () => {
         .then(res => {
           expect(res.body).to.be.an('object');
           expect(res.body.body).to.equal('test comment')
+        })
+    })
+    it('GET returns 400 and error message', () => {
+      return request
+        .post('/api/articles/hi/comments')
+        .expect(400)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Wrong ID. Your comment has not been added.' });
         })
     })
   })
