@@ -25,7 +25,7 @@ describe('NC_news', () => {
   // we need a separate describe block for each end point
 
   describe('/articles', () => {
-    it('returns 200 and all articles', () => {
+    it('GET returns 200 and all articles', () => {
       return request
         .get('/api/articles')
         .expect(200)
@@ -37,7 +37,7 @@ describe('NC_news', () => {
   })
 
   describe('/comments', () => {
-    it('returns 200 and all comments', () => {
+    it('GET returns 200 and all comments', () => {
       return request
         .get('/api/comments')
         .expect(200)
@@ -49,7 +49,7 @@ describe('NC_news', () => {
   })
 
   describe('/topics', () => {
-    it('returns 200 and all topics', () => {
+    it('GET returns 200 and all topics', () => {
       return request
         .get('/api/topics')
         .expect(200)
@@ -60,7 +60,7 @@ describe('NC_news', () => {
     })
   })
   describe('/users', () => {
-    it('returns 200 and all users', () => {
+    it('GET returns 200 and all users', () => {
       return request
         .get('/api/users')
         .expect(200)
@@ -71,7 +71,7 @@ describe('NC_news', () => {
     })
   })
   describe('/articles/:article_id', () => {
-    it('returns 200 and the article', () => {
+    it('GET returns 200 and the article', () => {
       return request
         .get(`/api/articles/${articles[1]._id}`)
         .expect(200)
@@ -82,7 +82,7 @@ describe('NC_news', () => {
     })
   })
   describe('/topics/:topic_id', () => {
-    it('returns 200 and the topics by id', () => {
+    it('GET returns 200 and the topics by id', () => {
       return request
         .get(`/api/topics/${topics[1]._id}`)
         .expect(200)
@@ -136,7 +136,6 @@ describe('NC_news', () => {
 
   describe('articles/:article_id/comments', () => {
     it('POST returns 201 and the comment posted to a specific article', () => {
-      console.log(articles[1]._id)
       return request
         .post(`/api/articles/${articles[1]._id}/comments`)
         .send(
@@ -148,7 +147,6 @@ describe('NC_news', () => {
         )
         .expect(201)
         .then(res => {
-          console.log(res.body)
           expect(res.body).to.be.an('object');
           expect(res.body.body).to.equal('test comment')
         })
@@ -156,7 +154,7 @@ describe('NC_news', () => {
   })
 
   describe('/users/:username', () => {
-    it('returns 200 and the users by username', () => {
+    it('GET returns 200 and the users by username', () => {
       return request
         .get(`/api/users/${users[1].username}`)
         .expect(200)
@@ -168,13 +166,38 @@ describe('NC_news', () => {
   })
 
   describe('/:article_id', () => {
-    it('returns 200 and increments the vote', () => {
+    it(' PUT returns 200 and increments the votes for articles', () => {
       return request
         .put(`/api/articles/${articles[0]._id}?vote=up`)
         .expect(200)
         .then(res => {
           expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
         })
+    })
+  })
+  describe('/:comment_id', () => {
+    it(' PUT returns 200 and increments the votes for comments', () => {
+      return request
+        .put(`/api/comments/${comments[0]._id}?vote=up`)
+        .expect(200)
+        .then(res => {
+          expect(res.body).to.eql({ msg: 'Thanks for your vote!!' });
+        })
+    })
+  })
+
+  describe('/:comment_id', () => {
+    it('return 200 for /comments/:comment_id and remove a new comment.', () => {
+      const commentId = comments[0]._id;
+      return request
+        .delete(`/api/comments/${commentId}`)
+        .expect(200)
+        .then(response => {
+          expect(response.body).to.be.an('object')
+          expect(response.body).to.be.eql({})
+          expect(response.text).to.be.equal(`deleted successfully`)
+        })
+
     })
   })
 

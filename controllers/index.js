@@ -126,9 +126,9 @@ exports.changeVotes = (req, res, next) => {
 }
 
 exports.getCommentsById = (req, res, next) => {
-  Comment.findById(req.params.comment_id)
-    .then(comment_id => {
-      res.send(comment_id)
+  Comment.findById(req.params._id)
+    .then(comment => {
+      res.send({ comment })
     })
 }
 
@@ -139,15 +139,16 @@ exports.changeVotesofComments = (req, res, next) => {
       if (req.query.vote === 'up') comment.votes++;
       else if (req.query.vote === 'down') comment.votes--;
       return comment.save();
-    }).then(comment => res.status(200).send({ comment }))
+    }).then(comment => res.status(200).send({ msg: 'Thanks for your vote!!' }))
     .catch(next);
 }
 
 exports.deleteCommentById = (req, res, next) => {
   return Comment.findByIdAndRemove(req.params.comment_id)
     .then(commentId => {
-      res.status(200).send('deleted succesfully')
+      res.status(200).send('deleted successfully')
     })
+    .catch(console.log)
 }
 
 exports.getUsersByUsername = (req, res, next) => {

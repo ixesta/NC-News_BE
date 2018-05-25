@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 // const { } = require('../utils');
 const testData = require('./testData')
 const { formatTopicData, formatCommentData, formatUserData, formatArticleData } = require('../utils');
-
+const { DB_URL } = require('../config')
 const { Article, Comment, Topic, User } = require('../models');
 const data = require('./devData')
 mongoose.Promise = Promise;

@@ -1,4 +1,4 @@
-process.env.NODE_ENV = 'dev';
+process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
 
 const { seedDB } = require('./seed');
 const mongoose = require('mongoose');
@@ -17,5 +17,5 @@ mongoose.connect(DB_URL)
     console.log(`DB successfully seeded...`);
     return mongoose.disconnect();
   }).then(() => {
-    console.log('successfully disconnected from the dev DB...')
+    console.log('successfully disconnected from the DB...')
   })
