@@ -18,7 +18,7 @@ app.get('/api', (req, res, next) => {
 
 
 app.get('/', (req, res, next) => {
-  res.send({ msg: 'hi' })
+  res.render('./pages/index')
 })
 app.use('/*', (req, res, next) => {
   next({ status: 404, msg: 'Page not found' })
