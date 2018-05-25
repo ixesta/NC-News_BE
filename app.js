@@ -1,10 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
-mongoose.Promise = Promise;
-process.env.NODE_ENV = !process.env.NODE_ENV ? 'dev' : 'test';
-const { DB_URL } = require('./config');
+process.env.NODE_ENV = process.env.NODE_ENV || 'dev'
+const { DB_URL } = process.env.NODE_ENV === 'production' ? process.env : require('./config');
 
-
+mongoose.connect(DB_URL);
 const apiRouter = require("./routes/api");
 
 const app = express();
