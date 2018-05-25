@@ -12,4 +12,7 @@ router.route('/:article_id/comments')
   .get(getCommentsByArticleId)
   .post(addCommentToArticle)
 
+router.use('/*', (req, res, next) => {
+  next({ status: 404, msg: 'Page not found' })
+})
 module.exports = router;

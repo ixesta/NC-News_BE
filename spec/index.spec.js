@@ -36,7 +36,7 @@ describe('NC_news', () => {
     })
   })
 
-  describe('/comments', () => {
+  describe.only('/comments', () => {
     it('GET returns 200 and all comments', () => {
       return request
         .get('/api/comments')

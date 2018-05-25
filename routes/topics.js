@@ -6,12 +6,16 @@ const { getTopics, getTopicsById, getArticlesByTopic, addArticleToTopic } = requ
 router.route('/')
   .get(getTopics)
 
-router.route('/:topic_id')
-  .get(getTopicsById)
+// router.route('/:topic_id')
+//   .get(getTopicsById)
 
 router.route('/:topic/articles')
   .get(getArticlesByTopic)
   .post(addArticleToTopic)
+
+router.use('/*', (req, res, next) => {
+  next({ status: 404, msg: 'Page not found' })
+})
 
 
 module.exports = router;

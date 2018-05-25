@@ -13,6 +13,12 @@ exports.getTopics = (req, res, next) => {
     .then(topics => {
       res.send(topics)
     })
+    .catch(err => {
+      next({
+        status: 404,
+        msg: 'Page not found'
+      })
+    })
 }
 
 
@@ -21,12 +27,24 @@ exports.getComments = (req, res, next) => {
     .then(comments => {
       res.send(comments)
     })
+    .catch(err => {
+      next({
+        status: 404,
+        msg: 'Page not found'
+      })
+    })
 }
 
 exports.getUsers = (req, res, next) => {
   User.find()
     .then(users => {
       res.send(users)
+    })
+    .catch(err => {
+      next({
+        status: 404,
+        msg: 'Page not found'
+      })
     })
 }
 
@@ -42,6 +60,12 @@ exports.getArticles = (req, res, next) => {
       })
       res.send({ articles: result })
     })
+    .catch(err => {
+      next({
+        status: 404,
+        msg: 'Article not found'
+      })
+    })
 }
 // exports.getArticles = (req, res, next) => {
 //   Article.find()
@@ -52,17 +76,30 @@ exports.getArticles = (req, res, next) => {
 //     .catch(console.log)
 // }
 
-exports.getTopicsById = (req, res, next) => {
-  Topic.findById(req.params.topic_id)
-    .then(topic => {
-      res.send({ topic })
-    })
-}
+// exports.getTopicsById = (req, res, next) => {
+//   Topic.findById(req.params.topic_id)
+//     .then(topic => {
+//       res.send({ topic })
+//     })
+//     .catch(err => {
+//       next({
+//         status: 404,
+//         msg: 'ID not found'
+//       })
+//     })
+// }
 
 exports.getArticlesByTopic = (req, res, next) => {
   Article.find({ belongs_to: req.params.topic })
     .then(articles => {
       res.send(articles)
+    })
+    .catch(err => {
+      next({
+
+        status: 404,
+        msg: 'Page not found'
+      })
     })
 }
 
@@ -78,7 +115,12 @@ exports.addArticleToTopic = (req, res, next) => {
     .then(article => {
       res.status(201).send({ article });
     })
-    .catch(console.log)
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'ERROR: Your article has not been added'
+      })
+    })
 
 }
 
@@ -86,6 +128,12 @@ exports.getArticlesById = (req, res, next) => {
   Article.findById(req.params.article_id)
     .then(article => {
       res.send({ article })
+    })
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'ID not found'
+      })
     })
 }
 
@@ -96,11 +144,15 @@ exports.getCommentsByArticleId = (req, res, next) => {
     .then(comments => {
       res.send({ comments })
     })
-    .catch(console.log)
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'Wrong ID'
+      })
+    })
 }
 
 exports.addCommentToArticle = (req, res, next) => {
-  console.log(req.body, '<<<<<<<<<<<<<< addding comment...')
   const newComment = new Comment({
     body: req.body.body,
     belongs_to: req.params.article_id,
@@ -111,36 +163,62 @@ exports.addCommentToArticle = (req, res, next) => {
     .then(comment => {
       res.status(201).send(comment);
     })
-    .catch(console.log)
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'Your comment has not been added. Try again'
+      })
+    })
 }
 
 exports.changeVotes = (req, res, next) => {
   const articleId = req.params.article_id;
+  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: msg }) : null) : null;
   return Article.findByIdAndUpdate(articleId)
     .then(article => {
       if (req.query.vote === 'up') article.votes++;
       else if (req.query.vote === 'down') article.votes--;
       return article.save();
     }).then(article => res.status(200).send({ msg: 'Thanks for your vote!!' }))
-    .catch(next);
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'Wrong input. Try again with UP or DOWN'
+      })
+    })
 }
 
 exports.getCommentsById = (req, res, next) => {
-  Comment.findById(req.params._id)
+
+  Comment.findById(req.params.comment_id)
     .then(comment => {
       res.send({ comment })
+    })
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'Wrong ID. Try again'
+      })
     })
 }
 
 exports.changeVotesofComments = (req, res, next) => {
+  const msg = 'Invalid input, use “up” to add a vote or “down” to decrease it.'
+  req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: msg }) : null) : null;
   const commentId = req.params.comment_id;
+  req.query.vote
   return Comment.findByIdAndUpdate(commentId)
     .then(comment => {
       if (req.query.vote === 'up') comment.votes++;
       else if (req.query.vote === 'down') comment.votes--;
       return comment.save();
     }).then(comment => res.status(200).send({ msg: 'Thanks for your vote!!' }))
-    .catch(next);
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'Wrong input. Try again with UP or DOWN'
+      })
+    })
 }
 
 exports.deleteCommentById = (req, res, next) => {
@@ -148,13 +226,22 @@ exports.deleteCommentById = (req, res, next) => {
     .then(commentId => {
       res.status(200).send('deleted successfully')
     })
-    .catch(console.log)
+    .catch(err => {
+      next({
+        status: 400,
+        msg: 'ERROR: Try again'
+      })
+    })
 }
 
 exports.getUsersByUsername = (req, res, next) => {
   User.findOne({ username: req.params.username })
     .then(user => {
+      if (user === null) return next({
+        status: 400,
+        msg: 'Wrong username'
+      })
       res.send(user)
     })
-    .catch(console.log)
+    .catch(next)
 }
