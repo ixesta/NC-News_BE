@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev'
 const { DB_URL } = process.env.NODE_ENV === 'production' ? process.env : require('./config');
 
+
 mongoose.connect(DB_URL);
 const apiRouter = require("./routes/api");
 
@@ -10,6 +11,7 @@ const app = express();
 const bodyParser = require('body-parser');
 app.use(bodyParser.json())
 
+app.use(express.static('public'))
 app.use('/api', apiRouter);
 
 app.get('/api', (req, res, next) => {
@@ -18,8 +20,9 @@ app.get('/api', (req, res, next) => {
 
 
 app.get('/', (req, res, next) => {
-  res.render('./pages/index')
+  res.render('index.html')
 })
+
 app.use('/*', (req, res, next) => {
   next({ status: 404, msg: 'Page not found' })
 })
