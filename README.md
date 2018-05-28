@@ -5,7 +5,7 @@ Northcoders News is a social news aggregation, web content rating, and discussio
 
 
 Installation Instructions (on your local machine)
-You will need to install Node.js at version 7.9.0 to run Northcoders News.
+You will need to install Node.js at version 9.10.1 to run Northcoders News.
 
 Node
 Type the command below to check if you already have node installed:

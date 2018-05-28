@@ -20,27 +20,29 @@
   <p>GET /api/articles
     <br>Returns all the articles</p>
 
+  <p>GET /api/articles/:article_id
+    <br>Get an individual article</p>
+
   <p>GET /api/articles/:article_id/comments
     <br>Get all the comments for a individual article</p>
 
   <p>POST /api/articles/:article_id/comments
-    <br>Add a new comment to an article. This route requires a JSON body with a comment key and value pair e.g: {"comment": "This
-    is my new comment"}</p>
+    <br>Add a new comment to an article. This route requires a JSON body with a comment key and value pair e.g: `{"comment":
+    "This is my new comment"}`</p>
 
   <p>PUT /api/articles/:article_id
-    <br>Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down' e.g: http://northcoders-news-api.herokuapp.com/api/articles/:article_id?vote=up</p>
+    <br>Increment or Decrement the votes of an article by one. This route requires a vote query of 'up' or 'down' e.g: `/api/articles/:article_id?vote=up`</p>
 
   <p>PUT /api/comments/:comment_id
-    <br>Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down' e.g: http://northcoders-news-api.herokuapp.com/api/comments/:comment_id?vote=down</p>
+    <br>Increment or Decrement the votes of a comment by one. This route requires a vote query of 'up' or 'down' e.g: `/api/comments/:comment_id?vote=down`</p>
 
   <p>DELETE /api/comments/:comment_id
-    <br>Deletes a comment if the comment was created by the Northcoder user</p>
+    <br>Deletes a comment.</p>
 
   <p>GET /api/users/:username
     <br>Returns a JSON object with the profile data for the specified user.</p>
 
-  <p>GET /api/users/:username/repos
-    <br>Returns a JSON array with all the public repos of the specified user.</p>
+
 
 </body>
 
