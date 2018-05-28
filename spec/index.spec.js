@@ -125,7 +125,7 @@ describe('NC_news', () => {
   })
 
   describe('/topics/:topic/articles', () => {
-    it("GET /:topic/articles should return all articles corresponding to that topic", () => {
+    it("GET /:topic/articles returns all articles corresponding to that topic", () => {
       return request
         .get("/api/topics/cats/articles")
         .expect(200)
