@@ -75,7 +75,6 @@ exports.getArticles = (req, res, next) => {
 
 
 exports.getArticlesByTopic = (req, res, next) => {
-  console.log('***********')
   Article.find({ belongs_to: req.params.topic })
     .then(articles => {
       // hitting an empty array , status 404
