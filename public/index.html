@@ -14,6 +14,12 @@
   <p>GET /api/topics
     <br>Get all the topics</p>
 
+  <p>GET /api/comments
+    <br>Get all the comments</p>
+
+  <p>GET /api/users
+    <br>Get all the users</p>
+
   <p>GET /api/topics/:topic/articles
     <br>Returns all the articles for a certain topic</p>
 
@@ -25,6 +31,9 @@
 
   <p>GET /api/articles/:article_id/comments
     <br>Get all the comments for a individual article</p>
+
+  <p>GET /api/comments/:comment_id
+    <br>Get an specific comment by its Id</p>
 
   <p>POST /api/articles/:article_id/comments
     <br>Add a new comment to an article. This route requires a JSON body with a comment key and value pair e.g: `{"comment":
