@@ -82,7 +82,7 @@ exports.getArticlesByTopic = (req, res, next) => {
         status: 404,
         msg: 'Page not found'
       })
-      res.send(articles)
+      res.send({ articles })
     })
     .catch(err => {
       next({
