@@ -78,7 +78,7 @@ exports.getArticlesByTopic = (req, res, next) => {
   Article.find({ belongs_to: req.params.topic }).populate('created_by')
     .then(articles => {
       // hitting an empty array , status 404
-      if (articles.length === 0) next({
+      if (articles.length === 0) throw ({
         status: 404,
         msg: 'Page not found'
       })
