@@ -20,7 +20,7 @@ exports.getTopics = (req, res, next) => {
 
 
 exports.getComments = (req, res, next) => {
-  Comment.find()
+  Comment.find().populate('created_by')
     .then(comments => {
       res.send(comments)
     })
@@ -46,7 +46,7 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-  Article.find().lean()
+  Article.find().populate('created_by').lean()
     .then(articles => {
       return Promise.all([articles, ...articles.map(artObj => Comment.count({ belongs_to: artObj._id }))])
     })
@@ -75,7 +75,7 @@ exports.getArticles = (req, res, next) => {
 
 
 exports.getArticlesByTopic = (req, res, next) => {
-  Article.find({ belongs_to: req.params.topic })
+  Article.find({ belongs_to: req.params.topic }).populate('created_by')
     .then(articles => {
       // hitting an empty array , status 404
       if (articles.length === 0) next({
@@ -114,7 +114,7 @@ exports.addArticleToTopic = (req, res, next) => {
 }
 
 exports.getArticlesById = (req, res, next) => {
-  Article.findById(req.params.article_id)
+  Article.findById(req.params.article_id).populate('created_by')
     .then(article => {
       res.send({ article })
     })
@@ -129,7 +129,7 @@ exports.getArticlesById = (req, res, next) => {
 
 
 exports.getCommentsByArticleId = (req, res, next) => {
-  Comment.find({ belongs_to: req.params.article_id })
+  Comment.find({ belongs_to: req.params.article_id }).populate('created_by')
     .then(comments => {
       res.send({ comments })
     })
@@ -163,7 +163,7 @@ exports.addCommentToArticle = (req, res, next) => {
 exports.changeVotes = (req, res, next) => {
   const articleId = req.params.article_id;
   req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: 'Wrong input. Try again with UP or DOWN' }) : null) : null;
-  return Article.findByIdAndUpdate(articleId)
+  return Article.findByIdAndUpdate(articleId).populate('created_by')
     .then(article => {
       if (req.query.vote === 'up') article.votes++;
       else if (req.query.vote === 'down') article.votes--;
@@ -180,7 +180,7 @@ exports.changeVotes = (req, res, next) => {
 
 exports.getCommentsById = (req, res, next) => {
 
-  Comment.findById(req.params.comment_id)
+  Comment.findById(req.params.comment_id).populate('created_by')
     .then(comment => {
       res.send({ comment })
     })
@@ -197,7 +197,7 @@ exports.changeVotesofComments = (req, res, next) => {
   req.query.vote !== 'up' ? (req.query.vote !== 'down' ? next({ status: 400, msg: 'Wrong input. Try again with UP or DOWN' }) : null) : null;
   const commentId = req.params.comment_id;
   req.query.vote
-  return Comment.findByIdAndUpdate(commentId)
+  return Comment.findByIdAndUpdate(commentId).populate('created_by')
     .then(comment => {
       if (req.query.vote === 'up') comment.votes++;
       else if (req.query.vote === 'down') comment.votes--;
