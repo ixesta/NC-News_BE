@@ -142,17 +142,24 @@ exports.getCommentsByArticleId = (req, res, next) => {
 }
 
 exports.addCommentToArticle = (req, res, next) => {
-  const newComment = new Comment({
-    body: req.body.body,
-    belongs_to: req.params.article_id,
-    created_by: '5b058261f82dc80c7c5fb422'
-  })
-  return Comment.create(newComment)
-
+  const user = User.findOne()
+    .then(({ _id }) => {
+      const newComment = new Comment({
+        body: req.body.body,
+        belongs_to: req.params.article_id,
+        created_by: _id
+      })
+      return newComment.save()
+    })
+    .then(comment => {
+      return Comment.findById(comment._id)
+        .populate('created_by')
+    })
     .then(comment => {
       res.status(201).send(comment);
     })
     .catch(err => {
+      console.log(err)
       next({
         status: 400,
         msg: 'Malformed request. Your comment has not been added.'
